@@ -41,6 +41,16 @@ def list_tasks():
         print("No tasks found.")
         return
     
+    # If the user wants to filter the tasks, we ask for the filter type (pending or completed) and create a new list of tasks based on that filter. If the user chooses "pending", we create a list of tasks that are not done. If the user chooses "completed", we create a list of tasks that are done. If there are no tasks that match the filter, we print a message indicating that no tasks were found for that filter.
+    if filter == "pending":
+        tasks = [t for t in tasks if not t["done"]]
+    elif filter == "completed":
+        tasks = [t for t in tasks if t["done"]]
+    
+    if not tasks:
+        print("No tasks found for this filter.")
+        return
+    
     # We loop through each task in the list of tasks and print its details. We use a checkmark (✔) to indicate that a task is done and a cross (✘) to indicate that it is not done. We also print the ID, title, creation date, and description (if it exists) for each task.
     for task in tasks:
         status = "✔" if task["done"] else "✘"

@@ -26,7 +26,22 @@ def main():
         
         # If option is "1", we call the list_tasks function to display all tasks.
         if option == "1":
-            list_tasks()
+            print("\n=== Filter by: ===")
+            print("1. All tasks")
+            print("2. Pending tasks")
+            print("3. Completed tasks")
+            filter = input("Choose filter: ").strip()
+            
+            if filter == "1":
+                list_tasks()
+            elif filter == "2":
+                list_tasks(filter="pending")
+            elif filter == "3":
+                list_tasks(filter="done")
+            else:
+                print("Invalid filter option. Showing all tasks.")
+            
+            list_tasks(filter)
 
         # If user chooses "2", we ask for the title and description of the new task and call the create_task function to add it to the list.
         elif option == "2":
