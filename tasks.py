@@ -5,6 +5,15 @@
 from storage import load_tasks, save_tasks
 from datetime import datetime
 
+# The get_tasks function retrieves the list of tasks from the file and allows for optional filtering based on their completion status (pending or done). If no filter is provided, it returns all tasks.
+def get_tasks(filter=None):
+    tasks = load_tasks()
+    if filter == "pending":
+        return [t for t in tasks if not t["done"]]
+    elif filter == "done":
+        return [t for t in tasks if t["done"]]
+    return tasks
+
 # The create_task function takes a title and an optional description to create a new task. It loads the existing tasks, creates a new task with a unique ID, and saves the updated list of tasks back to the file. It also prints a success message to the user.
 def create_task(title, description=""):
     
@@ -25,11 +34,8 @@ def create_task(title, description=""):
     
     # We save the updated list of tasks back to the file using the save_tasks function. Finally, we print a message confirming that the task was created successfully.
     save_tasks(tasks)
-    
-    # Finally, we print a message confirming that the task was created successfully.
-    print(f"Task '{title}' created successfully!")
 
-
+""" 
 # In this function, we load the existing tasks and check if there are any tasks to display. If there are no tasks, we print a message indicating that no tasks were found. If there are tasks, we loop through each task and print its details, including the status (done or not), ID, title, creation date, and description (if it exists).
 def list_tasks():
     
@@ -57,7 +63,7 @@ def list_tasks():
         print(f"[{status}] #{task['id']} - {task['title']} ({task['created_at']})")
         if task["description"]:
             print(f"     {task['description']}")
-
+"""
 
 # The complete_task function takes a task ID as an argument, loads the existing tasks, and marks the task with the given ID as completed (done = True). It then saves the updated list of tasks back to the file and prints a success message. If the task with the given ID is not found, it prints an error message.
 def complete_task(task_id):
@@ -68,10 +74,7 @@ def complete_task(task_id):
         if task["id"] == task_id:
             task["done"] = True
             save_tasks(tasks)
-            print(f"Task #{task_id} marked as completed!")
             return
-    print(f"Task #{task_id} not found.")
-
 
 # The delete_task function takes a task ID as an argument, loads the existing tasks, and removes the task with the given ID from the list. It then saves the updated list of tasks back to the file and prints a success message. If the task with the given ID is not found, it prints an error message.
 def delete_task(task_id):
@@ -79,8 +82,4 @@ def delete_task(task_id):
     
     # We create a new list of tasks that includes all tasks except the one with the given ID. If the length of the new list is the same as the original list, it means that no task with the given ID was found, and we print an error message. If a task was removed, we save the updated list of tasks back to the file using the save_tasks function and print a message confirming that the task was removed.
     new_tasks = [t for t in tasks if t["id"] != task_id]
-    if len(new_tasks) == len(tasks):
-        print(f"Task #{task_id} not found.")
-        return
     save_tasks(new_tasks)
-    print(f"🗑 Task #{task_id} removed.")

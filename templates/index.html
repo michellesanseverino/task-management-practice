@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="eng">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tasks Manager</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 700px; margin: 40px auto; padding: 0 20px; background: #f5f5f5; }
+        h1 { color: #333; }
+        form input, form textarea { width: 100%; padding: 8px; margin: 6px 0; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
+        form button { padding: 8px 16px; background: #4ca0af; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        .task { background: white; padding: 12px 16px; margin: 8px 0; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .task.done { opacity: 0.5; text-decoration: line-through; }
+        .actions a { margin-left: 8px; text-decoration: none; color: white; padding: 4px 10px; border-radius: 4px; font-size: 13px; }
+        .btn-complete { background: #4de21f; }
+        .btn-delete { background: #fc2718; }
+        .filters a { margin-right: 10px; text-decoration: none; color: #555; font-size: 14px; }
+        .filters a.active { font-weight: bold; color: #333; }
+        .tag { font-size: 12px; color: #888; margin-top: 2px; }
+    </style>
+</head>
+<body>
+
+    <h1>📝 Tasks Manager</h1>
+
+    <!-- Form -->
+    <form action="/create" method="POST">
+        <input type="text" name="title" placeholder="Task title" required>
+        <textarea name="description" placeholder="Description (optional)" rows="2"></textarea>
+        <button type="submit">+ Add task</button>
+    </form>
+
+    <!-- Filters -->
+    <div class="filters" style="margin: 20px 0;">
+        <a href="/" class="{{ 'active' if filter == None }}">All</a>
+        <a href="/?filter=pending" class="{{ 'active' if filter == 'pending' }}">Pending</a>
+        <a href="/?filter=done" class="{{ 'active' if filter == 'done' }}">Completed</a>
+    </div>
+
+    <!-- Tasks List-->
+    {% if tasks %}
+        {% for task in tasks %}
+        <div class="task {{ 'done' if task.done }}">
+            <div>
+                <strong>{{ task.title }}</strong>
+                {% if task.description %}
+                    <div class="tag">{{ task.description }}</div>
+                {% endif %}
+                <div class="tag">Created on {{ task.created_at }}</div>
+            </div>
+            <div class="actions">
+                {% if not task.done %}
+                    <a href="/complete/{{ task.id }}" class="btn-complete">✔ Complete</a>
+                {% endif %}
+                <a href="/delete/{{ task.id }}" class="btn-delete">🗑 Delete</a>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <p>No tasks found.</p>
+    {% endif %}
+
+</body>
+</html>

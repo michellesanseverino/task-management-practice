@@ -22,5 +22,7 @@ task_management_practice/
 ├── tasks.py          # Tasks
 ├── storage.py        # Reading and Writing using JSON
 ├── tasks.json        # Local database
+├── templates/
+    └── index.html    # Web interface
 └── README.md         # Documentation
 ```
